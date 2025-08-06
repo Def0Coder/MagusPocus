@@ -17,10 +17,10 @@ MonoBehaviour:
   possibleLoot:
   - itemData: {fileID: 11400000, guid: aaa892dc5ec0c7846aa407b717b09db2, type: 2}
     itemPrefab: {fileID: 2614426134351462040, guid: f0476f5d4da042c45ad4e19e7a151b9c, type: 3}
-    dropChance: 0.105
+    dropChance: 0.856
   - itemData: {fileID: 11400000, guid: 021c16a4e770274499f695980fb26f93, type: 2}
     itemPrefab: {fileID: 5155548005550331916, guid: baac8d7ef5680ca41aa4666cea86a0ce, type: 3}
-    dropChance: 0.857
+    dropChance: 0.88
   - itemData: {fileID: 11400000, guid: 9995dcba87bca8a4baa44b76cba4146e, type: 2}
     itemPrefab: {fileID: 8342836487735993442, guid: 2cea6d1ec9e8028458d81851d77b7574, type: 3}
-    dropChance: 0.692
+    dropChance: 0.017
