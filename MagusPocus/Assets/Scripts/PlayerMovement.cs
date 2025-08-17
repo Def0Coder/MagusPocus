@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+
     [Header("Movement Settings")]
     public float moveTime = 0.2f;
     public float moveDelay = 0.1f;
@@ -42,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (currentInput != Vector2.zero)
         {
-            Vector3 destination = transform.position + (Vector3)(currentInput * gridSize);
+            Vector3 destination = transform.position + (Vector3)(currentInput * gridSize).normalized;
 
             // Controllo se la cella è libera
             if (IsWalkable(destination))
@@ -74,6 +76,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
         transform.position = destination;
+
+        EnemyController[] enemies = FindObjectsOfType<EnemyController>();
+        foreach (EnemyController enemy in enemies)
+        {
+            enemy.TakeTurn();
+        }
+            
         yield return new WaitForSeconds(moveDelay);
         isMoving = false;
     }

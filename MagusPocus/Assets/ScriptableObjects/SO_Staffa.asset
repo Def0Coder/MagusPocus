@@ -17,6 +17,5 @@ MonoBehaviour:
   description: Staffa della pietra
   maxStack: 1
   count: 0
-  canPick: 0
-  boostHealth: 0
-  boostDamage: 10
+  boostHealth: 10
+  boostDamage: 1

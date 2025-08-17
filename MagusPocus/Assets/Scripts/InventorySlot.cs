@@ -8,6 +8,8 @@ public class InventorySlot : MonoBehaviour
     public TextMeshProUGUI quantityText;
     public Button removeButton;
 
+    [HideInInspector] public int slotIndex = -1;
+
     private ItemData item;
 
     public void AddItem(ItemData newItem, int quantity)
@@ -15,11 +17,8 @@ public class InventorySlot : MonoBehaviour
         item = newItem;
         icon.sprite = item.icon;
         icon.enabled = true;
-
         quantityText.text = quantity > 1 ? quantity.ToString() : "";
-
-        if (removeButton != null)
-            removeButton.interactable = true;
+        if (removeButton != null) removeButton.interactable = true;
     }
 
     public void ClearSlot()
@@ -28,14 +27,13 @@ public class InventorySlot : MonoBehaviour
         icon.sprite = null;
         icon.enabled = false;
         quantityText.text = "";
-
-        if (removeButton != null)
-            removeButton.interactable = false;
+        if (removeButton != null) removeButton.interactable = false;
     }
 
+    // opzionale: se preferisci usare il metodo sul prefab invece di wiring da codice
     public void OnRemoveButton()
     {
-        if (item != null)
-            InventoryManager.instance.RemoveItem(item);
+        Debug.Log($"Slot {slotIndex} remove pressed (item: {(item != null ? item.name : "null")})");
+        InventoryManager.instance.RemoveItemAt(slotIndex);
     }
 }

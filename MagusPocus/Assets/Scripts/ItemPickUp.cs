@@ -4,6 +4,9 @@ public class ItemPickUp : MonoBehaviour
 {
     public ItemData itemData;
 
+   
+
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -21,5 +24,6 @@ public class ItemPickUp : MonoBehaviour
         {
             Destroy(gameObject);
         }
+       
     }
 }

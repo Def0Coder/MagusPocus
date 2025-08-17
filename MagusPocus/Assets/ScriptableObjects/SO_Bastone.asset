@@ -17,5 +17,5 @@ MonoBehaviour:
   description: Bastoncino Findus
   maxStack: 1
   count: 0
-  boostHealth: 0
-  boostDamage: 1
+  boostHealth: 1
+  boostDamage: 2

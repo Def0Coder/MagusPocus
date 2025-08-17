@@ -13,7 +13,8 @@ public class ItemData : ScriptableObject
 
 
 
-    public int boostHealth = 0;
-    public int boostDamage = 0;
+    public int boostHealth;
+    public int boostDamage;
+
   
 }
