@@ -93,7 +93,7 @@ public class EnemyController : MonoBehaviour
         if (collision.CompareTag("Player"))
             Debug.Log("Preso");
 
-        BattleManager.Instance.StartBattle(player.GetComponent<PlayerStats>(), GetComponent<EnemyStats>());
+        BattleManager.Instance.StartBattle(player.GetComponent<PlayerStats>(), GetComponent<EnemyStats>(), enemyData);
 
 
     }

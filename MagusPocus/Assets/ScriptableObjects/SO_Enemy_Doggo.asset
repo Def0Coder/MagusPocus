@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e580d8d474cd7045b95f9fe22018f6c, type: 3}
-  m_Name: SO_Enemy_Tescolo
+  m_Name: SO_Enemy_Doggo
   m_EditorClassIdentifier: 
-  enemyName: Tescolo
+  enemyName: Doggo
   baseDamage: 1
-  baseHealth: 10
-  sprite: {fileID: 4462060314142874283, guid: 4dd53d9b12eb54a4c9999a407e1a44ed, type: 3}
+  baseHealth: 4
+  baseShields: 3
+  baseVelocity: 1
+  sprite: {fileID: 445549806, guid: a5ee3fa65034b9e4aa394d4010cf29ab, type: 3}

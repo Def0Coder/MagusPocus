@@ -8,21 +8,28 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance;
 
     [Header("UI Riferimenti")]
-    public GameObject battleUI;
-    public Image playerImage;
-    public TextMeshProUGUI playerHpText;
-    public Image enemyImage;
-    public TextMeshProUGUI enemyNameText;
-    public Slider playerHealthBar;
-    public Slider enemyHealthBar;
-    public TextMeshProUGUI battleLogText;
+    [SerializeField] private GameObject battleUI;
+    [SerializeField] private TextMeshProUGUI battleLogText;
+    [SerializeField] private Image playerImage;
+    [SerializeField] private TextMeshProUGUI playerHpText;
+    [SerializeField] private Slider playerHealthBar;
+    [SerializeField] private TextMeshProUGUI playerShieldsText;
+    [SerializeField] private TextMeshProUGUI playerAtkText;
+    [SerializeField] private Image enemyImage;
+    [SerializeField] private TextMeshProUGUI enemyNameText;
+    [SerializeField] private TextMeshProUGUI enemyHealthText;
+    [SerializeField] private Slider enemyHealthBar;
+    [SerializeField] private TextMeshProUGUI enemyShieldsText;
+    [SerializeField] private TextMeshProUGUI enemyAtkText;
+
+
+    [SerializeField] public GameObject attackButton;
 
     private PlayerStats player;
     private EnemyStats enemy;
+    private EnemyData data;
 
-
-
-    private bool playerTurn = true;
+    private bool playerTurn = false;
 
     private void Awake()
     {
@@ -31,54 +38,62 @@ public class BattleManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        Instance = this;
 
+        Instance = this;
         battleUI.SetActive(false);
     }
 
-    public void StartBattle(PlayerStats playerStats, EnemyStats enemyStats)
+    public void StartBattle(PlayerStats playerStats, EnemyStats enemyStats, EnemyData enemyData)
     {
         player = playerStats;
         enemy = enemyStats;
+        data = enemyData;
 
-        // Inizializza nemico
         enemy.Init();
 
         // UI setup
         battleUI.SetActive(true);
 
         playerHpText.text = player.CurrentHealth.ToString();
-        
+        playerShieldsText.text = player.CurrentShields.ToString();
+        playerHealthBar.maxValue = player.MaxHealth;
+        playerHealthBar.value = player.CurrentHealth;
+        playerAtkText.text = player.CurrentDamage.ToString();
+       
 
         enemyImage.sprite = enemy.enemyData.sprite;
         enemyNameText.text = enemy.enemyData.enemyName;
-
-        playerHealthBar.maxValue = player.MaxHealth;
-        playerHealthBar.value = player.CurrentHealth;
-
         enemyHealthBar.maxValue = enemy.CurrentHealth;
         enemyHealthBar.value = enemy.CurrentHealth;
+        enemyShieldsText.text = enemy.CurrentShields.ToString();
+        enemyHealthText.text = enemy.CurrentHealth.ToString();
+        enemyAtkText.text = enemy.CurrentDamage.ToString();
+
 
         battleLogText.text = "Il combattimento inizia!";
 
-        // Stop movimento
+        // Blocca movimento player
         player.GetComponent<PlayerMovement>().enabled = false;
 
-        playerTurn = true;
-
-        
-
-        OnAttackButton();   //test per primo attacco
-
+        // Determina chi inizia
+        if (player.baseVelocity >= data.baseVelocity)
+        {
+            playerTurn = true;
+            Debug.Log("Inizia il Player");
+            OnAttackButton(); // primo attacco automatico
+           
+        }
+        else
+        {
+            playerTurn = false;
+            Debug.Log("Inizia il Nemico");
+            StartCoroutine(EnemyAttack());
+        }
     }
-
-
-
 
     public void OnAttackButton()
     {
         if (!playerTurn) return;
-
         StartCoroutine(PlayerAttack());
     }
 
@@ -87,6 +102,8 @@ public class BattleManager : MonoBehaviour
         battleLogText.text = "Attacchi il nemico!";
         enemy.TakeDamage(player.CurrentDamage);
         enemyHealthBar.value = enemy.CurrentHealth;
+        enemyHealthText.text = enemy.CurrentHealth.ToString();
+        enemyShieldsText.text = enemy.CurrentShields.ToString();
 
         yield return new WaitForSeconds(0.5f);
 
@@ -97,7 +114,13 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            // Pausa di 2 secondi prima che torni al player
+            yield return new WaitForSeconds(1f);
+
             playerTurn = false;
+
+            
+
             StartCoroutine(EnemyAttack());
         }
     }
@@ -110,7 +133,7 @@ public class BattleManager : MonoBehaviour
         player.TakeDamage(enemy.CurrentDamage);
         playerHealthBar.value = player.CurrentHealth;
         playerHpText.text = player.CurrentHealth.ToString();
-
+        playerShieldsText.text = player.CurrentShields.ToString();
 
         yield return new WaitForSeconds(0.5f);
 
@@ -121,6 +144,13 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
+            // Pausa di 2 secondi prima che torni al player
+            yield return new WaitForSeconds(1f);
+
+
+
+            attackButton.SetActive(true);
+
             playerTurn = true;
         }
     }
@@ -136,7 +166,7 @@ public class BattleManager : MonoBehaviour
         battleUI.SetActive(false);
         player.GetComponent<PlayerMovement>().enabled = true;
 
-        if (enemy.IsDead() && enemy != null)
+        if (enemy != null && enemy.IsDead())
         {
             Destroy(enemy.gameObject);
         }

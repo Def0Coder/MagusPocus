@@ -7,30 +7,43 @@ public class PlayerStats : MonoBehaviour
 {
 
     [Header("Valori base")]
-    public int baseDamage = 10;
-    public int baseHealth = 100;
+    public int baseDamage = 3;
+    public int baseHealth = 20;
+    public int baseShieds = 10;
+    public int baseVelocity = 1;
 
     public int CurrentDamage { get; private set; }
     public int MaxHealth { get; private set; }
     public int CurrentHealth { get; private set; }
 
+    public int CurrentShields { get;  set; }
+
+    public int CurrentVelocity { get; set; }
+
+
     private List<ItemData> equippedItems = new List<ItemData>();
 
     void Start()
-    {
+    {   
+        CurrentDamage = baseDamage + CurrentDamage;
+        CurrentHealth = baseHealth + MaxHealth;
+        CurrentShields = baseShieds + CurrentShields;
         RecalculateStats();
-        CurrentHealth = MaxHealth;
+       
     }
 
     public void AddItem(ItemData item)
     {
         equippedItems.Add(item);
-        Debug.Log("Equipped " + item.name);
+        Debug.Log("Equipped " + item.name); 
+
+        // Se la vita attuale è minore della nuova max, la aumentiamo di conseguenza
+        CurrentHealth = baseHealth + MaxHealth;
+
 
         RecalculateStats();
 
-        // Se la vita attuale è minore della nuova max, la aumentiamo di conseguenza
-        CurrentHealth = MaxHealth;
+       
     }
 
     public void RemoveItem(ItemData item)
@@ -50,14 +63,18 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        CurrentHealth = Mathf.Max(CurrentHealth - amount, 0);
+        if (CurrentShields > 0)
+            CurrentShields = Mathf.Max(CurrentShields - amount, 0);
+
+        else
+            CurrentHealth = Mathf.Max(CurrentHealth - amount, 0);
     }
 
     private void RecalculateStats()
     {
-        // Reset ai valori base
-        CurrentDamage = baseDamage;
-        MaxHealth = baseHealth;
+         // Reset ai valori base
+        //  CurrentDamage = baseDamage;
+       // MaxHealth = baseHealth;
 
         // Aggiungi i bonus degli oggetti equipaggiati
         foreach (var item in equippedItems)
